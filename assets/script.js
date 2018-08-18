@@ -9,7 +9,8 @@ var config = {
 };
 firebase.initializeApp(config);
 
-// Start to declare variables 
+// GLOBAL VARIABLES (CAPS PLEASE)
+var DROPDOWNITEMS = 
 // Array for list of attractions, 
 
 // ----------- Dropdown menu-----------
