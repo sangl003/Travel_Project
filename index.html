@@ -5,46 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>VSTR.lol</title>
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+            /* Set the size of the div element that contains the map */
+           #map {
+             height: 400px;  /* The height is 400 pixels */
+             width: 100%;  /* The width is the width of the web page */
+            }
+            .jumbotron {
+                padding: 1rem 1rem;
+                margin-bottom: 1rem;
+                background-color: #e9ecef;
+                border-radius: .3rem;
+            }
+
+            .container-fluid {
+                width: 100%;
+                /* height: 90%; */
+                padding-right: 15px;
+                padding-top: 15px;
+                padding-left: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+            .card {
+                    position: relative;
+                    display: -ms-flexbox;
+                    display: flex;
+                    -ms-flex-direction: column;
+
+                }
+         </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class ="row">
         <div class ="col-lg-12">
             <div class="jumbotron" style="text-align:center;background-color:#0660b9;color: white; font-family: cursive;">
-            <h1>VSTR</h1> 
-        </div> <!-- End of Jombotron -->
+            <h1>Traveller</h1> 
+        </div> <!-- End of Jumbotron -->
+
+        <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+                <!-- <a class="navbar-brand" href="#">Favorites</a> -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Restaurants</a>
+                        <a class="dropdown-item" href="#">Shopping</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" id ="new-added-drop-down"href="#">User inputs gets added here</a>
+                        </div>
+                    </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+                </nav>
         <!-- Dropdown menu -->
-        <div class="dropdown" style="text-align:left">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              <!-- We'll be generating the dropdown menu in the script.js -->
-              <button class="dropdown-item" type="button">Action</button>
-              <button class="dropdown-item" type="button">Another action</button>
-              <button class="dropdown-item" type="button">Something else here</button> 
-            </div>
-          </div>
+   
         </div>
     </div> <!-- End of row1 containing Header and drop down -->
+    
     <div class = "row">
         <div class ="col-lg-12">
-        <div id = "mapView">
-
+        <div class="card">
+     
+            <div id = "map">
+                
+            </div>
         </div>
         </div> 
     </div> <!-- End of row2 containing Map -->
+
     <div class = "row">
         <div class ="col-lg-12">
-        <div id = "Results">
-
-        </div>
-        </div> 
-    </div> <!-- End of row3 containing Map -->
+            <!-- <div class="card"> -->
+                <!-- <div class="card-body">
+                <h5 class="card-title">Table of results</h5>                -->
+                        <table  id = "Results" class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Search Results</th>                                   
+                                  </tr>
+                                </thead>
+                            <tbody>
+                                  <tr>
+                                    <td scope="row">Roseville</td>                                   
+                                </tr> 
+                                <tr>
+                                        <td scope="row">Edina</td>
+                                </tr>                           
+                            </tbody>
+                              </table>         
+                <!-- </div> -->
+            
+            </div>
+        <!-- </div>  -->
+  </div>   <!-- End of row3 containing Map -->
 
     </div> <!-- End of container -->
+   
+          <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBilTfdRvt-zY9DekzPLxPmplUg9DexOns&callback=initMap">
+          </script>
+          <script src="assets/script.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>        
