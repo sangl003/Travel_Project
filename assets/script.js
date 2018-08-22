@@ -1,13 +1,13 @@
-  // Initialize Firebase (Joe's firebase, just an fyi)
-var config = {
+  // Initialize Firebase
+  var config = {
     apiKey: "AIzaSyDnsfwc_F6xp0rx4esMlSBUuACbHJG9itc",
     authDomain: "project-1-userinput.firebaseapp.com",
     databaseURL: "https://project-1-userinput.firebaseio.com",
     projectId: "project-1-userinput",
-    storageBucket: "",
-    messagingSenderId: "32436368046",
-};
-firebase.initializeApp(config);
+    storageBucket: "project-1-userinput.appspot.com",
+    messagingSenderId: "32436368046"
+  };
+  firebase.initializeApp(config);
 
 // Google places API KEY: AIzaSyDBufjD9u_vKD1khDCHUIOj8dnwPYsF2cc
 
@@ -40,7 +40,7 @@ firebase.initializeApp(config);
   //      keep this simple as it's not core of our app
 
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
-var DROPDOWNITEMS = ["Restaurants", "Shopping", "Landmarks", "Parks"]; 
+var DROPDOWNITEMS = []; 
 // Will append more if user wants to search for other things
 
 // ------------------------------------------- FUNCTIONS ------------------------------------------
@@ -61,7 +61,7 @@ function upperCaseFirstLetterInString(str) {
 function renderDropDownMenu() {
   // Deleting the list prior to adding new people or characters
   // (this is necessary otherwise you will have repeat buttons)
-  $(".dropdown-menu").empty();
+  $("#new-added-drop-down").empty();
   // Looping through the array of people and characters
   for (var i = 0; i < DROPDOWNITEMS.length; i++) {
       // Then dynamically generating buttons for each search in the array
