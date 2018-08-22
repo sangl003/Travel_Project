@@ -1,13 +1,13 @@
-  // Initialize Firebase (Joe's firebase, just an fyi)
-var config = {
-    apiKey: "AIzaSyDnsfwc_F6xp0rx4esMlSBUuACbHJG9itc",
-    authDomain: "project-1-userinput.firebaseapp.com",
-    databaseURL: "https://project-1-userinput.firebaseio.com",
-    projectId: "project-1-userinput",
-    storageBucket: "",
-    messagingSenderId: "32436368046",
-};
-firebase.initializeApp(config);
+  // Initialize Firebase
+  // var config = {
+  //   apiKey: "AIzaSyDnsfwc_F6xp0rx4esMlSBUuACbHJG9itc",
+  //   authDomain: "project-1-userinput.firebaseapp.com",
+  //   databaseURL: "https://project-1-userinput.firebaseio.com",
+  //   projectId: "project-1-userinput",
+  //   storageBucket: "project-1-userinput.appspot.com",
+  //   messagingSenderId: "32436368046"
+  // };
+  // firebase.initializeApp(config);
 
 // Google places API KEY: AIzaSyDBufjD9u_vKD1khDCHUIOj8dnwPYsF2cc
 
@@ -40,7 +40,7 @@ firebase.initializeApp(config);
   //      keep this simple as it's not core of our app
 
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
-var DROPDOWNITEMS = ["Restaurants", "Shopping", "Landmarks", "Parks"]; 
+var DROPDOWNITEMS = [""]; 
 // Will append more if user wants to search for other things
 
 // ------------------------------------------- FUNCTIONS ------------------------------------------
@@ -61,20 +61,20 @@ function upperCaseFirstLetterInString(str) {
 function renderDropDownMenu() {
   // Deleting the list prior to adding new people or characters
   // (this is necessary otherwise you will have repeat buttons)
-  $(".dropdown-menu").empty();
+  $("#newly-added-drop-down-btns").empty();
   // Looping through the array of people and characters
   for (var i = 0; i < DROPDOWNITEMS.length; i++) {
       // Then dynamically generating buttons for each search in the array
       // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-      var a = $("<button>");
+      var a = $("<a>");
       // Adding a class of search-btn to our button, and some styling
-      a.addClass("search-btn btn btn-default");
+      a.addClass("dropdown-item");
       // Adding a data-attribute
       a.attr("data-name", DROPDOWNITEMS[i]);
       // Providing the initial button text
       a.text(DROPDOWNITEMS[i]);
       // Adding the button to the buttons-view div
-      $("#all-buttons").append(a);
+      $("#newly-added-drop-down-btns").append(a);
   }
 }
 
@@ -84,7 +84,7 @@ $("#add-search").on("click", function(event) {
   // This line grabs the input from the textbox
   var search = $("#search-input").val().trim();
   // Alert since this was already in the array
-  if (DROPDOWNITEMS < 8) {
+  if (DROPDOWNITEMS < 4) {
     // If the search by the user is already in the array an alert appears
     if (DROPDOWNITEMS.includes(search)){
         alert("Search is already in the dropdown");
@@ -108,52 +108,89 @@ $("#add-search").on("click", function(event) {
           DROPDOWNITEMS.push(convertedStr);
         }
     }
-  } else { // When DROPDOWNITEMS reaches 8
+  } else { // When DROPDOWNITEMS reaches 4, we'll only give the user 3 searches unless they remove some
     alert("The amount of search has reached the limit, please close out of some of the searches");
   }
   // Calling renderButtons which handles the processing of our search array
-  renderButtons();
+  renderDropDownMenu();
   // Clearing input after the search is added
   document.getElementById("search-input").value= "";
 });
 
-/* Note: This example requires that you consent to location sharing when
-prompted by your browser. If you see the error "The Geolocation service
-failed.", it means you probably did not give permission for the browser to
-locate you.  */
-var map, infoWindow;
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 6
-  });
-  infoWindow = new google.maps.InfoWindow;
-
-  // Try HTML5 geolocation.
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-
-      infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
-      infoWindow.open(map);
-      map.setCenter(pos);
-    }, function() {
-      handleLocationError(true, infoWindow, map.getCenter());
+  /* Note: This example requires that you consent to location sharing when
+  prompted by your browser. If you see the error "The Geolocation service
+  failed.", it means you probably did not give permission for the browser to
+  locate you.  */
+  var map, infoWindow;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: -34.397, lng: 150.644},
+      zoom: 6
     });
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
-}
+    infoWindow = new google.maps.InfoWindow;
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(browserHasGeolocation ?
-                        'Error: The Geolocation service failed.' :
-                        'Error: Your browser doesn\'t support geolocation.');
-  infoWindow.open(map);
-}
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        var service = new google.maps.places.PlacesService(map);
+
+
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('Location found.');
+        infoWindow.open(map);
+        map.setCenter(pos);        
+        console.log(pos);
+      }, function() {
+        handleLocationError(true, infoWindow, map.getCenter());
+        
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+
+   
+    
+
+      function callback(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+          }
+        }
+      }
+
+      function createMarker(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+
+    
+
+  }
+
+  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+    infoWindow.open(map);
+  }
+
+
+  // Create the places service.
+  
+
+
+  
