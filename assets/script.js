@@ -44,6 +44,26 @@ var DROPDOWNITEMS = [""];
 // Will append more if user wants to search for other things
 
 // ------------------------------------------- FUNCTIONS ------------------------------------------
+/* NEEDS TO BE done
+// Components of the Query
+const api_KEY = "";
+// When one of the dropdown items is selected
+function displayLocationsInfo() {
+  // To remove previous images if there was any
+  $(".person").remove();
+  var search = "&q=" + $(this).attr("data-name");
+  var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm" + search + limit + rating;
+
+  // Creating an AJAX call for the specific
+  $.ajax({
+      url: queryURL,
+      method: "GET"
+
+  }).then(function(response) {
+      
+  });
+} */
+
 // String conversion where it uppercases every first letter of the string
 // https://stackoverflow.com/questions/32589197/capitalize-first-letter-of-each-word-in-a-string-javascript/32589256
 function upperCaseFirstLetterInString(str) {
@@ -108,7 +128,7 @@ $("#add-search").on("click", function(event) {
           DROPDOWNITEMS.push(convertedStr);
         }
     }
-  } else { // When DROPDOWNITEMS reaches 4, we'll only give the user 3 searches unless they remove some
+  } else { // When DROPDOWNITEMS reaches 4 since, we'll only give the user 3 searches unless they remove some
     alert("The amount of search has reached the limit, please close out of some of the searches");
   }
   // Calling renderButtons which handles the processing of our search array
@@ -117,44 +137,44 @@ $("#add-search").on("click", function(event) {
   document.getElementById("search-input").value= "";
 });
 
-  /* Note: This example requires that you consent to location sharing when
-  prompted by your browser. If you see the error "The Geolocation service
-  failed.", it means you probably did not give permission for the browser to
-  locate you.  */
-  var map, infoWindow;
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -34.397, lng: 150.644},
-      zoom: 6
+//$(document).on("click", ".dropdown-item", displayLocationsInfo);
+// Calling the renderDropDownMenu function to display the buttons initially
+renderDropDownMenu();
+
+/* Note: This example requires that you consent to location sharing when
+prompted by your browser. If you see the error "The Geolocation service
+failed.", it means you probably did not give permission for the browser to
+locate you.  */
+var map, infoWindow;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 6
+  });
+  infoWindow = new google.maps.InfoWindow;
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var service = new google.maps.places.PlacesService(map);
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('Location found.');
+      infoWindow.open(map);
+      map.setCenter(pos);        
+      console.log(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+      
     });
-    infoWindow = new google.maps.InfoWindow;
-
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        var service = new google.maps.places.PlacesService(map);
-
-
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
-        map.setCenter(pos);        
-        console.log(pos);
-      }, function() {
-        handleLocationError(true, infoWindow, map.getCenter());
-        
-      });
-    } else {
-      // Browser doesn't support Geolocation
-      handleLocationError(false, infoWindow, map.getCenter());
-    }
-
-   
-    
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
 
       function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -162,7 +182,7 @@ $("#add-search").on("click", function(event) {
             createMarker(results[i]);
           }
         }
-      }
+      } // End of callback function
 
       function createMarker(place) {
         var placeLoc = place.geometry.location;
@@ -175,10 +195,7 @@ $("#add-search").on("click", function(event) {
           infowindow.setContent(place.name);
           infowindow.open(map, this);
         });
-
-    
-
-  }
+  } // End of createMarker function
 
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
@@ -186,11 +203,7 @@ $("#add-search").on("click", function(event) {
                           'Error: The Geolocation service failed.' :
                           'Error: Your browser doesn\'t support geolocation.');
     infoWindow.open(map);
-  }
+  } // End of handleLocationError function
+}
 
-
-  // Create the places service.
-  
-
-
-  
+// Create the places service.
