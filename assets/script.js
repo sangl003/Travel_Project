@@ -8,41 +8,32 @@
   //   messagingSenderId: "32436368046"
   // };
   // firebase.initializeApp(config);
-
 // Google places API KEY: AIzaSyDBufjD9u_vKD1khDCHUIOj8dnwPYsF2cc
-
 // ------------------------------------------ CHECK LIST ------------------------------------------
-
 // ----------- Dropdown Menu-----------
 // Assigned: Joe
 // [x] Predefined list of 4-6 things (i.e. restaurants, landmarks, parks etc)
 // [x] The list expands on user input for the last 3 searches, using firebase to store values
 // [ ] Drop down to create dynamic favorite list
 // [ ] Results div to display list of responses
-
 // -------------- Map View --------------
 // Assigned:
 // [ ] Google maps to be displayed in a Mapview div spanning 70% of screen
 // [ ] Zoom in and Zoom out functionality
 // [ ] Location button to determine users location
 // [ ] Info buttons on points of interest? - Google Places API ref
-
 // ---------- Table Creation ----------
 // Assigned:
 // [ ] Creating a table below the displayed map
 // [ ] Reviews and distance are displayed on the table
-
-
 // Optional Additions (If we have time)
 // Assigned:
   // ----------- Weather Display ---------
   // [ ] Weather display in the top-right corner? 
   //      keep this simple as it's not core of our app
-
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
 var DROPDOWNITEMS = [""]; 
 // Will append more if user wants to search for other things
-
 // ------------------------------------------- FUNCTIONS ------------------------------------------
 /* NEEDS TO BE done
 // Components of the Query
@@ -53,12 +44,10 @@ function displayLocationsInfo() {
   $(".person").remove();
   var search = "&q=" + $(this).attr("data-name");
   var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm" + search + limit + rating;
-
   // Creating an AJAX call for the specific
   $.ajax({
       url: queryURL,
       method: "GET"
-
   }).then(function(response) {
       
   });
@@ -81,7 +70,6 @@ function upperCaseFirstLetterInString(str) {
   // Directly return the joined string
   return splitStr.join(' '); 
 }
-
 // To dynamically render new dropdowns if they were added
 function renderDropDownMenu() {
   // Deleting the list prior to adding in more searches
@@ -102,7 +90,6 @@ function renderDropDownMenu() {
       $("#newly-added-drop-down-btns").append(a);
   }
 }
-
 // This function will add what was searched to the dropdown menu if it was not already in the list
 $("#add-search").on("click", function(event) {
   event.preventDefault();
@@ -144,7 +131,6 @@ $("#add-search").on("click", function(event) {
   document.getElementById("search-input").value= "";
 });
 
-
 //$(document).on("click", ".dropdown-item", displayLocationsInfo);
 // Calling the renderDropDownMenu function to display the buttons initially
 renderDropDownMenu();
@@ -163,13 +149,11 @@ locate you.  */
 
       function initMap() {
         // Create the map.
-        var pyrmont = {lat:44.970, lng: -93.244};
+        var minneapolis = {lat:44.970, lng: -93.244};
       
-       // $('#Restaurant')
-//$('#Shopping')
-      //  $('#')
+
         map = new google.maps.Map(document.getElementById('map'), {
-          center: pyrmont,
+          center: minneapolis,
           zoom: 17
         });
         infoWindow = new google.maps.InfoWindow;
@@ -264,3 +248,31 @@ locate you.  */
         }
         map.fitBounds(bounds);
       }
+
+      
+      var getWeather = function() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            lat: position.coords.latitude
+            lng: position.coords.longitude
+          });
+        };
+        var queryURL = `https://api.weather.gov/points/${lat},${lng}` 
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).then(function(response) {
+          console.log(response["properties"]["relativeLocation"]["properties"]["city"]);
+          console.log(response["properties"]["relativeLocation"]["properties"]["state"]);
+          console.log(response["properties"]["forecast"]);
+          var queryURL_1 = response["properties"]["forecast"];
+          $.ajax({
+            url: queryURL_1,
+            method: "GET"
+          }).then(function(response) {
+            console.log(response["properties"]["periods"][0]["temperature"]);
+            console.log(response["properties"]["periods"][0]["temperatureUnit"]);
+          });
+        });
+      };
+
