@@ -165,9 +165,9 @@ locate you.  */
         // Create the map.
         var pyrmont = {lat:44.970, lng: -93.244};
       
-        $('#Restaurant')
-        $('#Shopping')
-        $('#')
+       // $('#Restaurant')
+//$('#Shopping')
+      //  $('#')
         map = new google.maps.Map(document.getElementById('map'), {
           center: pyrmont,
           zoom: 17
