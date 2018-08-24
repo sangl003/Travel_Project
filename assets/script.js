@@ -64,6 +64,11 @@ function displayLocationsInfo() {
   });
 } */
 
+// Adding a div so the dropdown items are not clustered into one
+function addDiv() {
+  $("#container").append($smallDiv.clone());
+}
+
 // String conversion where it uppercases every first letter of the string
 // https://stackoverflow.com/questions/32589197/capitalize-first-letter-of-each-word-in-a-string-javascript/32589256
 function upperCaseFirstLetterInString(str) {
@@ -79,14 +84,14 @@ function upperCaseFirstLetterInString(str) {
 
 // To dynamically render new dropdowns if they were added
 function renderDropDownMenu() {
-  // Deleting the list prior to adding new people or characters
+  // Deleting the list prior to adding in more searches
   // (this is necessary otherwise you will have repeat buttons)
   $("#newly-added-drop-down-btns").empty();
   // Looping through the array of people and characters
   for (var i = 0; i < DROPDOWNITEMS.length; i++) {
       // Then dynamically generating buttons for each search in the array
       // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-      var a = $("<a>");
+      var a = $("<div>");
       // Adding a class of search-btn to our button, and some styling
       a.addClass("dropdown-item");
       // Adding a data-attribute
@@ -104,11 +109,13 @@ $("#add-search").on("click", function(event) {
   // This line grabs the input from the textbox
   var search = $("#search-input").val().trim();
   // Alert since this was already in the array
-  if (DROPDOWNITEMS < 4) {
+  if (DROPDOWNITEMS.length < 4) {
     // If the search by the user is already in the array an alert appears
     if (DROPDOWNITEMS.includes(search)){
         alert("Search is already in the dropdown");
-    } else {
+    }
+    // If the function includes() fails then we try another way of checking for a duplicate string
+    else {
         var isTrue = false;
         // isTrue returns true if EXACT string found in the array
         for (let n = 0; n < DROPDOWNITEMS.length; n++) {
@@ -128,7 +135,7 @@ $("#add-search").on("click", function(event) {
           DROPDOWNITEMS.push(convertedStr);
         }
     }
-  } else { // When DROPDOWNITEMS reaches 4 since, we'll only give the user 3 searches unless they remove some
+  } else { // If the DROPDOWNITEMS.length reaches 4 we will only give the user 3 searches unless they remove some before adding more searches
     alert("The amount of search has reached the limit, please close out of some of the searches");
   }
   // Calling renderButtons which handles the processing of our search array
@@ -137,6 +144,7 @@ $("#add-search").on("click", function(event) {
   document.getElementById("search-input").value= "";
 });
 
+
 //$(document).on("click", ".dropdown-item", displayLocationsInfo);
 // Calling the renderDropDownMenu function to display the buttons initially
 renderDropDownMenu();
@@ -144,7 +152,7 @@ renderDropDownMenu();
 /* Note: This example requires that you consent to location sharing when
 prompted by your browser. If you see the error "The Geolocation service
 failed.", it means you probably did not give permission for the browser to
-locate you.  */
+locate you. */
 var map, infoWindow;
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
