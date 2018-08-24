@@ -8,41 +8,32 @@
   //   messagingSenderId: "32436368046"
   // };
   // firebase.initializeApp(config);
-
 // Google places API KEY: AIzaSyDBufjD9u_vKD1khDCHUIOj8dnwPYsF2cc
-
 // ------------------------------------------ CHECK LIST ------------------------------------------
-
 // ----------- Dropdown Menu-----------
 // Assigned: Joe
 // [x] Predefined list of 4-6 things (i.e. restaurants, landmarks, parks etc)
 // [x] The list expands on user input for the last 3 searches, using firebase to store values
 // [ ] Drop down to create dynamic favorite list
 // [ ] Results div to display list of responses
-
 // -------------- Map View --------------
 // Assigned:
 // [ ] Google maps to be displayed in a Mapview div spanning 70% of screen
 // [ ] Zoom in and Zoom out functionality
 // [ ] Location button to determine users location
 // [ ] Info buttons on points of interest? - Google Places API ref
-
 // ---------- Table Creation ----------
 // Assigned:
 // [ ] Creating a table below the displayed map
 // [ ] Reviews and distance are displayed on the table
-
-
 // Optional Additions (If we have time)
 // Assigned:
   // ----------- Weather Display ---------
   // [ ] Weather display in the top-right corner? 
   //      keep this simple as it's not core of our app
-
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
 var DROPDOWNITEMS = [""]; 
 // Will append more if user wants to search for other things
-
 // ------------------------------------------- FUNCTIONS ------------------------------------------
 /* NEEDS TO BE done
 // Components of the Query
@@ -53,17 +44,18 @@ function displayLocationsInfo() {
   $(".person").remove();
   var search = "&q=" + $(this).attr("data-name");
   var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm" + search + limit + rating;
-
   // Creating an AJAX call for the specific
   $.ajax({
       url: queryURL,
       method: "GET"
-
   }).then(function(response) {
       
   });
 } */
-
+// Adding a div so the dropdown items are not clustered into one
+function addDiv() {
+  $("#container").append($smallDiv.clone());
+}
 // String conversion where it uppercases every first letter of the string
 // https://stackoverflow.com/questions/32589197/capitalize-first-letter-of-each-word-in-a-string-javascript/32589256
 function upperCaseFirstLetterInString(str) {
@@ -76,17 +68,16 @@ function upperCaseFirstLetterInString(str) {
   // Directly return the joined string
   return splitStr.join(' '); 
 }
-
 // To dynamically render new dropdowns if they were added
 function renderDropDownMenu() {
-  // Deleting the list prior to adding new people or characters
+  // Deleting the list prior to adding in more searches
   // (this is necessary otherwise you will have repeat buttons)
   $("#newly-added-drop-down-btns").empty();
   // Looping through the array of people and characters
   for (var i = 0; i < DROPDOWNITEMS.length; i++) {
       // Then dynamically generating buttons for each search in the array
       // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-      var a = $("<a>");
+      var a = $("<div>");
       // Adding a class of search-btn to our button, and some styling
       a.addClass("dropdown-item");
       // Adding a data-attribute
@@ -97,18 +88,19 @@ function renderDropDownMenu() {
       $("#newly-added-drop-down-btns").append(a);
   }
 }
-
 // This function will add what was searched to the dropdown menu if it was not already in the list
 $("#add-search").on("click", function(event) {
   event.preventDefault();
   // This line grabs the input from the textbox
   var search = $("#search-input").val().trim();
   // Alert since this was already in the array
-  if (DROPDOWNITEMS < 4) {
+  if (DROPDOWNITEMS.length < 4) {
     // If the search by the user is already in the array an alert appears
     if (DROPDOWNITEMS.includes(search)){
         alert("Search is already in the dropdown");
-    } else {
+    }
+    // If the function includes() fails then we try another way of checking for a duplicate string
+    else {
         var isTrue = false;
         // isTrue returns true if EXACT string found in the array
         for (let n = 0; n < DROPDOWNITEMS.length; n++) {
@@ -128,7 +120,7 @@ $("#add-search").on("click", function(event) {
           DROPDOWNITEMS.push(convertedStr);
         }
     }
-  } else { // When DROPDOWNITEMS reaches 4 since, we'll only give the user 3 searches unless they remove some
+  } else { // If the DROPDOWNITEMS.length reaches 4 we will only give the user 3 searches unless they remove some before adding more searches
     alert("The amount of search has reached the limit, please close out of some of the searches");
   }
   // Calling renderButtons which handles the processing of our search array
@@ -136,7 +128,6 @@ $("#add-search").on("click", function(event) {
   // Clearing input after the search is added
   document.getElementById("search-input").value= "";
 });
-
 //$(document).on("click", ".dropdown-item", displayLocationsInfo);
 // Calling the renderDropDownMenu function to display the buttons initially
 renderDropDownMenu();
@@ -154,13 +145,11 @@ locate you.  */
 
       function initMap() {
         // Create the map.
-        var pyrmont = {lat:44.970, lng: -93.244};
+        var minneapolis = {lat:44.970, lng: -93.244};
       
-        $('#Restaurant')
-        $('#Shopping')
-        $('#')
+        
         map = new google.maps.Map(document.getElementById('map'), {
-          center: pyrmont,
+          center: minneapolis,
           zoom: 17
         });
         infoWindow = new google.maps.InfoWindow;
@@ -255,3 +244,29 @@ locate you.  */
         }
         map.fitBounds(bounds);
       }
+      
+      var getWeather = function() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            lat: position.coords.latitude
+            lng: position.coords.longitude
+          });
+        };
+        var queryURL = `https://api.weather.gov/points/${lat},${lng}` 
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).then(function(response) {
+          console.log(response["properties"]["relativeLocation"]["properties"]["city"]);
+          console.log(response["properties"]["relativeLocation"]["properties"]["state"]);
+          console.log(response["properties"]["forecast"]);
+          var queryURL_1 = response["properties"]["forecast"];
+          $.ajax({
+            url: queryURL_1,
+            method: "GET"
+          }).then(function(response) {
+            console.log(response["properties"]["periods"][0]["temperature"]);
+            console.log(response["properties"]["periods"][0]["temperatureUnit"]);
+          });
+        });
+      };
