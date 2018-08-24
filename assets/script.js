@@ -1,13 +1,13 @@
-  // Initialize Firebase
-  // var config = {
-  //   apiKey: "AIzaSyDnsfwc_F6xp0rx4esMlSBUuACbHJG9itc",
-  //   authDomain: "project-1-userinput.firebaseapp.com",
-  //   databaseURL: "https://project-1-userinput.firebaseio.com",
-  //   projectId: "project-1-userinput",
-  //   storageBucket: "project-1-userinput.appspot.com",
-  //   messagingSenderId: "32436368046"
-  // };
-  // firebase.initializeApp(config);
+// Initialize Firebase
+// var config = {
+//   apiKey: "AIzaSyDnsfwc_F6xp0rx4esMlSBUuACbHJG9itc",
+//   authDomain: "project-1-userinput.firebaseapp.com",
+//   databaseURL: "https://project-1-userinput.firebaseio.com",
+//   projectId: "project-1-userinput",
+//   storageBucket: "project-1-userinput.appspot.com",
+//   messagingSenderId: "32436368046"
+// };
+// firebase.initializeApp(config);
 // Google places API KEY: AIzaSyDBufjD9u_vKD1khDCHUIOj8dnwPYsF2cc
 // ------------------------------------------ CHECK LIST ------------------------------------------
 // ----------- Dropdown Menu-----------
@@ -28,11 +28,11 @@
 // [ ] Reviews and distance are displayed on the table
 // Optional Additions (If we have time)
 // Assigned:
-  // ----------- Weather Display ---------
-  // [ ] Weather display in the top-right corner? 
-  //      keep this simple as it's not core of our app
+// ----------- Weather Display ---------
+// [ ] Weather display in the top-right corner? 
+//      keep this simple as it's not core of our app
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
-var DROPDOWNITEMS = [""]; 
+var DROPDOWNITEMS = []; 
 // Will append more if user wants to search for other things
 // ------------------------------------------- FUNCTIONS ------------------------------------------
 /* NEEDS TO BE done
@@ -79,7 +79,7 @@ function renderDropDownMenu() {
   for (var i = 0; i < DROPDOWNITEMS.length; i++) {
       // Then dynamically generating buttons for each search in the array
       // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-      var a = $("<div>");
+      var a = $("<a>");
       // Adding a class of search-btn to our button, and some styling
       a.addClass("dropdown-item");
       // Adding a data-attribute
@@ -96,7 +96,7 @@ $("#add-search").on("click", function(event) {
   // This line grabs the input from the textbox
   var search = $("#search-input").val().trim();
   // Alert since this was already in the array
-  if (DROPDOWNITEMS.length < 4) {
+  if (DROPDOWNITEMS.length < 3) {
     // If the search by the user is already in the array an alert appears
     if (DROPDOWNITEMS.includes(search)){
         alert("Search is already in the dropdown");
@@ -123,7 +123,7 @@ $("#add-search").on("click", function(event) {
         }
     }
   } else { // If the DROPDOWNITEMS.length reaches 4 we will only give the user 3 searches unless they remove some before adding more searches
-    alert("The amount of search has reached the limit, please close out of some of the searches");
+    alert("Search limit has been reached, please close out some the searches in the dropdown");
   }
   // Calling renderButtons which handles the processing of our search array
   renderDropDownMenu();
@@ -131,148 +131,149 @@ $("#add-search").on("click", function(event) {
   document.getElementById("search-input").value= "";
 });
 
-//$(document).on("click", ".dropdown-item", displayLocationsInfo);
-// Calling the renderDropDownMenu function to display the buttons initially
-renderDropDownMenu();
+// When selecting a dropdown item it will display locations on the map
+/*$(document).on("click", ".dropdown-item", displayLocationsInfo);
+// Deletes the dropdown item that the user wants to remove
+$(document).on('click','.delete-item', function(){
+  $(this).remove();
+})*/
 
 /* Note: This example requires that you consent to location sharing when
 prompted by your browser. If you see the error "The Geolocation service
 failed.", it means you probably did not give permission for the browser to
-
-locate you.  */
+locate you. */
 
 // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-    
-      var map;
+// parameter when you first load the API. For example:
+// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
-      function initMap() {
-        // Create the map.
-        var minneapolis = {lat:44.970, lng: -93.244};
-      
+var map;
 
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: minneapolis,
-          zoom: 17
-        });
-        infoWindow = new google.maps.InfoWindow;
-        var service = new google.maps.places.PlacesService(map);
-        var getNextPage = null;
+function initMap() {
+  // Create the map.
+  var minneapolis = {lat:44.970, lng: -93.244};
 
-          // Try HTML5 geolocation.
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-              var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-              };
-             // var service = new google.maps.places.PlacesService(map);
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: minneapolis,
+    zoom: 17
+  });
+  
+  infoWindow = new google.maps.InfoWindow;
+  var service = new google.maps.places.PlacesService(map);
+  var getNextPage = null;
 
-              infoWindow.setPosition(pos);
-              infoWindow.setContent('Location found.');
-              infoWindow.open(map);
-              map.setCenter(pos);        
-              console.log(pos);
-            
-            service.nearbySearch(     
-            {
-              location: pos, radius: 500, type: ['store']
-            },
-              function(results, status, pagination) {
-              if (status !== 'OK') return;
-
-              createMarkers(results);
-              // moreButton.disabled = !pagination.hasNextPage;
-              // getNextPage = pagination.hasNextPage && function() {
-              //   pagination.nextPage();
-              // };
-            });
-            }, function() {
-              handleLocationError(true, infoWindow, map.getCenter());
-              
-            });
-          } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infoWindow, map.getCenter());
-          }
-
-        // Create the places service.
-        
-        // var moreButton = document.getElementById('more');
-        // moreButton.onclick = function() {
-        //   moreButton.disabled = true;
-        //   if (getNextPage) getNextPage();
-        // };
-
-        // Perform a nearby search.
-      
-      }
-
-    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
-      } // End of handleLocationError function
-
-
-      function createMarkers(places) {
-        var bounds = new google.maps.LatLngBounds();
-        var placesList = document.getElementById('places');
-
-
-
-        for (var i = 0, place; place = places[i]; i++) {
-          var image = {
-            url: place.icon,
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25)
-          };
-
-          var marker = new google.maps.Marker({
-            map: map,
-            icon: image,
-            title: place.name,
-            position: place.geometry.location
-          });
-
-          // var li = document.createElement('li');
-          // li.textContent = place.name;
-          // placesList.appendChild(li);
-
-          bounds.extend(place.geometry.location);
-        }
-        map.fitBounds(bounds);
-      }
-
-      
-      var getWeather = function() {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            lat: position.coords.latitude
-            lng: position.coords.longitude
-          });
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
         };
-        var queryURL = `https://api.weather.gov/points/${lat},${lng}` 
-        $.ajax({
-          url: queryURL,
-          method: "GET"
-        }).then(function(response) {
-          console.log(response["properties"]["relativeLocation"]["properties"]["city"]);
-          console.log(response["properties"]["relativeLocation"]["properties"]["state"]);
-          console.log(response["properties"]["forecast"]);
-          var queryURL_1 = response["properties"]["forecast"];
-          $.ajax({
-            url: queryURL_1,
-            method: "GET"
-          }).then(function(response) {
-            console.log(response["properties"]["periods"][0]["temperature"]);
-            console.log(response["properties"]["periods"][0]["temperatureUnit"]);
-          });
-        });
-      };
+        // var service = new google.maps.places.PlacesService(map);
 
+        infoWindow.setPosition(pos);
+        infoWindow.setContent('Location found.');
+        infoWindow.open(map);
+        map.setCenter(pos);        
+        console.log(pos);
+      
+      service.nearbySearch(     
+      {
+        location: pos, radius: 500, type: ['store']
+      },
+        function(results, status, pagination) {
+        if (status !== 'OK') return;
+
+        createMarkers(results);
+        // moreButton.disabled = !pagination.hasNextPage;
+        // getNextPage = pagination.hasNextPage && function() {
+        //   pagination.nextPage();
+        // };
+      });
+      }, function() {
+        handleLocationError(true, infoWindow, map.getCenter());
+        
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+
+  // Create the places service.
+  
+  // var moreButton = document.getElementById('more');
+  // moreButton.onclick = function() {
+  //   moreButton.disabled = true;
+  //   if (getNextPage) getNextPage();
+  // };
+
+  // Perform a nearby search.
+
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+  infoWindow.open(map);
+} // End of handleLocationError function
+
+
+function createMarkers(places) {
+  var bounds = new google.maps.LatLngBounds();
+  var placesList = document.getElementById('places');
+
+
+
+  for (var i = 0, place; place = places[i]; i++) {
+    var image = {
+      url: place.icon,
+      size: new google.maps.Size(71, 71),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(17, 34),
+      scaledSize: new google.maps.Size(25, 25)
+    };
+
+    var marker = new google.maps.Marker({
+      map: map,
+      icon: image,
+      title: place.name,
+      position: place.geometry.location
+    });
+
+    // var li = document.createElement('li');
+    // li.textContent = place.name;
+    // placesList.appendChild(li);
+
+    bounds.extend(place.geometry.location);
+  }
+  map.fitBounds(bounds);
+}
+
+
+var getWeather = function() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      lat: position.coords.latitude
+      lng: position.coords.longitude
+    });
+  };
+  var queryURL = `https://api.weather.gov/points/${lat},${lng}` 
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function(response) {
+    console.log(response["properties"]["relativeLocation"]["properties"]["city"]);
+    console.log(response["properties"]["relativeLocation"]["properties"]["state"]);
+    console.log(response["properties"]["forecast"]);
+    var queryURL_1 = response["properties"]["forecast"];
+    $.ajax({
+      url: queryURL_1,
+      method: "GET"
+    }).then(function(response) {
+      console.log(response["properties"]["periods"][0]["temperature"]);
+      console.log(response["properties"]["periods"][0]["temperatureUnit"]);
+    });
+  });
+};
