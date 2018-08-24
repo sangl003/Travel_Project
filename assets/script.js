@@ -52,10 +52,12 @@ function displayLocationsInfo() {
       
   });
 } */
+
 // Adding a div so the dropdown items are not clustered into one
 function addDiv() {
   $("#container").append($smallDiv.clone());
 }
+
 // String conversion where it uppercases every first letter of the string
 // https://stackoverflow.com/questions/32589197/capitalize-first-letter-of-each-word-in-a-string-javascript/32589256
 function upperCaseFirstLetterInString(str) {
@@ -128,6 +130,7 @@ $("#add-search").on("click", function(event) {
   // Clearing input after the search is added
   document.getElementById("search-input").value= "";
 });
+
 //$(document).on("click", ".dropdown-item", displayLocationsInfo);
 // Calling the renderDropDownMenu function to display the buttons initially
 renderDropDownMenu();
@@ -135,6 +138,7 @@ renderDropDownMenu();
 /* Note: This example requires that you consent to location sharing when
 prompted by your browser. If you see the error "The Geolocation service
 failed.", it means you probably did not give permission for the browser to
+
 locate you.  */
 
 // This example requires the Places library. Include the libraries=places
@@ -147,7 +151,7 @@ locate you.  */
         // Create the map.
         var minneapolis = {lat:44.970, lng: -93.244};
       
-        
+
         map = new google.maps.Map(document.getElementById('map'), {
           center: minneapolis,
           zoom: 17
@@ -244,6 +248,7 @@ locate you.  */
         }
         map.fitBounds(bounds);
       }
+
       
       var getWeather = function() {
         if (navigator.geolocation) {
@@ -270,3 +275,4 @@ locate you.  */
           });
         });
       };
+
