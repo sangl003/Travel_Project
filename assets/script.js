@@ -200,7 +200,7 @@ function initMap() {
 
       service.nearbySearch(
         {
-          location: pos, radius: 25, type: ['store']
+          location: pos, radius: 500, type: ['store']
         },
         function (results, status, pagination) {
           if (status !== 'OK') return;
