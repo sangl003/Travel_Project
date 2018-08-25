@@ -208,17 +208,14 @@ function initMap() {
           createMarkers(results);
           console.log(results);
 
-          console.log(results);
-
           for (var i = 0; i <= 5; i++){
             console.log(results[i].name);
             $("#table-results-Body").append(`<tr><td> ${results[i].name} Open Now :            
             
             ${results[i].opening_hours.open_now} 
             ${results[i].types} 
-            </td></tr>`);
-          }
-          
+            }</td></tr>`);
+          }          
           // moreButton.disabled = !pagination.hasNextPage;
           // getNextPage = pagination.hasNextPage && function() {
           //   pagination.nextPage(); ${results[i].photos[0].html_attributions[0]}
