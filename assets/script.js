@@ -215,10 +215,12 @@ function initMap() {
             ${results[i].opening_hours.open_now} 
             ${results[i].types} 
             }</td></tr>`);
-          }          
+          }
+          
           // moreButton.disabled = !pagination.hasNextPage;
           // getNextPage = pagination.hasNextPage && function() {
-          //   pagination.nextPage(); ${results[i].photos[0].html_attributions[0]}
+          //   pagination.nextPage();${results[i].photos[0].html_attributions[0]
+
           // };
         });
     }, function () {
