@@ -4,20 +4,29 @@
     width: 100%;  /* The width is the width of the web page */
 }
 
-.jumbotron {
-    padding: 1rem 1rem;
-    margin-bottom: 1rem;
-    background-color: #e9ecef;
-    border-radius: .3rem;
-}
-
 #weather {
     border-radius: 10px;
     color: whitesmoke;
     padding: 5px 5px 0px 5px;
     margin: 5px 15px 0px 5px;;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#added-btns {
+    width: 250px;    
+}
+
+#removeBtn {
+    float: right;
+}
+
+.jumbotron {
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    background-color: #e9ecef;
+    border-radius: .3rem;
 }
 
 .container-fluid {
