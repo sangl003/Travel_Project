@@ -223,7 +223,7 @@ function initMap() {
       // Perform a nearby search.
       service.nearbySearch(
         {
-          location: minneapolis, radius: 500, type: [srch]
+          location: pos, radius: 1000, type: [srch]
         },
         function (results, status, pagination) {
           if (status !== 'OK') return;
@@ -293,6 +293,7 @@ $("#reset-fav").on("click", function (event) {
   event.preventDefault();
   $("#newly-added-drop-down-btns").empty(); 
   $("#table-results-Body").empty();
+  DROPDOWNITEMS = [];
 // $(`#weather`).empty();
 // initMap();
 });
