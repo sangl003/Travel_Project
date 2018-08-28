@@ -1,6 +1,6 @@
 uExplorer is an application designed to assist tourists in finding the nearest amenities, services, and attractions to their current, and most likely unfamiliar, location. While it was created with the intention of assisting those new to an area, it also proves useful to locals and anyone else looking to learn more about the area surrounding the grounds they stand on.
 
-In its current state, VSTR features an interactive map that pulls the user’s current location (upon user approval) and displays nearby places-of-interest to the user. Preloaded categories of “Dining”, “Shopping”, “Landmarks”, “Bars”, and “Music” exist alongside the user’s capability to search and customize three additional categories to best suit their personal interests. Simplifying and limiting the search results to one category at a time allows users to select specific, narrowed-down categories to create a simple, easy to view UI.
+In its current state, uExplorer features an interactive map that pulls the user’s current location (upon user approval) and displays nearby places-of-interest to the user. Preloaded categories of “Cafe”, “Store”, “Restaurant”, “Bar”, and “Bank” exist alongside the user’s capability to search and customize five additional categories to best suit their personal interests. Simplifying and limiting the search results to one category at a time allows users to select specific, narrowed-down categories to create a simple, easy to view UI.
 
 
 
