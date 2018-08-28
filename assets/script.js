@@ -273,12 +273,26 @@ function initMap() {
           for (var i = 0; i <= 5; i++){
             console.log(results[i].name);
            
+            if ( results[i].opening_hours.open_now === true){
+              open = "Open"
+            }
+            else{
+              open = "Closed"
+            }
+
+         
+
             $("#table-results-Body").append(`<tr>
                     
-              <th> ${results[i].name} <br></th>                     
-                    <td>Type: 
-                    ${results[i].types} <br>                   
-                    </td></tr>`);
+              <th> ${results[i].name} <br></th> 
+                                        
+                    <td>
+                    Address:  ${results[i].vicinity} <br>  
+                    Now: ${open} <br>                     
+                    Ratings: ${results[i].rating}  <br>                            
+                    $$$: ${results[i].price_level} <br>
+                    Google Reviews: ${results[i].photos[0].html_attributions}
+              </td></tr>`);
           }
 
          })         
