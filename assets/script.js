@@ -33,35 +33,7 @@
 //      keep this simple as it's not core of our app
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
 var DROPDOWNITEMS = [];
-// Will append more if user wants to search for other things
-// ------------------------------------------- FUNCTIONS ------------------------------------------
-/*
-// Components of the Query
-const api_KEY = "";
-// When one of the dropdown items is selected
-function displayLocationsInfo() {
-  // To remove previous images if there was any
-  $(".person").remove();
-  var search = "&q=" + $(this).attr("data-name");
-  var queryURL = "https://maps.googleapis.com/places/api/place/textsearch/json?key=AIzaSyBilTfdRvt-zY9DekzPLxPmplUg9DexOns&callback=initMap&libraries=places";
-  // Creating an AJAX call for the specific
-  $.ajax({
-      url: queryURL,
-      method: "GET"
-  }).then(function(response) {
-      
-  document.getElementById("dropdown-item").addEventListener("click", button);
-  });
-  function button() {
-    console.log(document.getElementById("dropdown-item")
-    )};
-  function populateButtons(arrayToUse, classToAdd, areaToAddTo) {
-    $(areaToAddTo).empty();
 
-  
-  };
-}
-*/
 // Adding a div so the dropdown items are not clustered into one
 function addDiv() {
   $("#container").append($smallDiv.clone());
@@ -74,7 +46,7 @@ function upperCaseFirstLetterInString(str) {
   for (var i = 0; i < splitStr.length; i++) {
     // You do not need to check if i is larger than splitStr length, as your for does that for you
     // Assign it back to the array
-    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+    splitStr[i] = splitStr[i].charAt(0).toLowerCase() + splitStr[i].substring(1);
   }
   // Directly return the joined string
   return splitStr.join(' ');
@@ -96,18 +68,18 @@ function renderDropDownMenu() {
     // Providing the initial button text
     a.text(DROPDOWNITEMS[i]);
     // Adding the button to the buttons-view div
+   // let row = a.append('&nbsp <button class="delete-item btn-danger btn-sm"></button>');
+    $("#newly-added-drop-down-btns").append(a);
 
-    let row = a.append('&nbsp <button class="delete-item btn-danger btn-sm">X</button>');
-    $("#newly-added-drop-down-btns").append(row);
   }
 }
 // This function will add what was searched to the dropdown menu if it was not already in the list
-$("#add-search").on("click", function (event) {
+$("#add-fav").on("click", function (event) {
   event.preventDefault();
   // This line grabs the input from the textbox
   var search = $("#search-input").val().trim();
   // Alert since this was already in the array
-  if (DROPDOWNITEMS.length < 3) {
+  if (DROPDOWNITEMS.length < 5) {
     // If the search by the user is already in the array an alert appears
     if (DROPDOWNITEMS.includes(search)) {
       alert("Search is already in the dropdown");
@@ -134,17 +106,14 @@ $("#add-search").on("click", function (event) {
       }
     }
   } else { // If the DROPDOWNITEMS.length reaches 4 we will only give the user 3 searches unless they remove some before adding more searches
-    alert("Search limit has been reached, please close out some the searches in the dropdown");
+    
+    alert("Search limit has been reached, please Reset your list");
   }
   // Calling renderButtons which handles the processing of our search array
   renderDropDownMenu();
   // Clearing input after the search is added
   document.getElementById("search-input").value = "";
 });
-
-// When selecting a dropdown item it will display locations on the map
-// $(document).on("click", ".dropdown-item", displayLocationsInfo);
-// Deletes the dropdown item that the user wants to remove and removes it from the array
 
 $(document).on('click','.delete-item', function(){
   // Removes item from html
@@ -157,9 +126,6 @@ $(document).on('click','.delete-item', function(){
   }
 })
 
-// When selecting a dropdown item it will display locations on the map
-/*$(document).on("click", ".dropdown-item", displayLocationsInfo);
-// Deletes the dropdown item that the user wants to remove
 
 /* Note: This example requires that you consent to location sharing when
 prompted by your browser. If you see the error "The Geolocation service
@@ -178,7 +144,8 @@ function initMap() {
 
   map = new google.maps.Map(document.getElementById('map'), {
     center: minneapolis,
-    zoom: 17
+    mapTypeId: 'satellite',
+    zoom: 14
   });
 
   infoWindow = new google.maps.InfoWindow;
@@ -197,17 +164,26 @@ function initMap() {
 
       infoWindow.setPosition(pos);
       infoWindow.setContent('Location found.');
+
+      
       infoWindow.open(map);
       map.setCenter(pos);
       console.log(pos);
 
      //test for the weather api
      getWeather(pos);
+   
 
+     $(document).on('click','.dropdown-item', function(){
+      // Removes item from html
+      $("#table-results-Body").empty();
+      var srch = $(this).closest('a').text();
+      console.log(srch);  
+      var results;
       // Perform a nearby search.
       service.nearbySearch(
         {
-          location: pos, radius: 500, type: ['restaurants']
+          location: minneapolis, radius: 500, type: [srch]
         },
         function (results, status, pagination) {
           if (status !== 'OK') return;
@@ -217,6 +193,7 @@ function initMap() {
 
           for (var i = 0; i <= 5; i++){
             console.log(results[i].name);
+           
             $("#table-results-Body").append(`<tr>
                     
               <th> ${results[i].name} <br></th>                     
@@ -224,8 +201,9 @@ function initMap() {
                     ${results[i].types} <br>                   
                     </td></tr>`);
           }
-      });
 
+         })         
+        });    
     }, function () {
       handleLocationError(true, infoWindow, map.getCenter());
 
@@ -234,6 +212,7 @@ function initMap() {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
+  
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -248,6 +227,8 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 function createMarkers(places) {
   var bounds = new google.maps.LatLngBounds();
   var placesList = document.getElementById('places');
+
+  
   for (var i = 0, place; place = places[i]; i++) {
     var image = {
       url: place.icon,
@@ -270,6 +251,16 @@ function createMarkers(places) {
 }
 
 
+
+$("#reset-fav").on("click", function (event) {
+  event.preventDefault();
+  $("#newly-added-drop-down-btns").empty(); 
+  $("#table-results-Body").empty();
+ // $(`#weather`).empty();
+// initMap();
+ 
+});
+
 var getWeather = function(userPosition) {
   var userState;
   var userCity;
@@ -277,7 +268,7 @@ var getWeather = function(userPosition) {
   var userTempUnit;
   
   var queryURL = `https://api.weather.gov/points/${userPosition.lat},${userPosition.lng}`;
-
+  
   var weatherDiv = $(`<p>`)
 
   console.log(userPosition);
