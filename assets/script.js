@@ -51,14 +51,10 @@ function displayLocationsInfo() {
   }).then(function(response) {
       
   document.getElementById("dropdown-item").addEventListener("click", button);
-
   });
-
   function button() {
     console.log(document.getElementById("dropdown-item")
-
     )};
-
   function populateButtons(arrayToUse, classToAdd, areaToAddTo) {
     $(areaToAddTo).empty();
 
@@ -100,7 +96,8 @@ function renderDropDownMenu() {
     // Providing the initial button text
     a.text(DROPDOWNITEMS[i]);
     // Adding the button to the buttons-view div
-    let row = a.append('<button class="delete-item">remove</button>');
+
+    let row = a.append('&nbsp <button class="delete-item btn-danger btn-sm">X</button>');
     $("#newly-added-drop-down-btns").append(row);
   }
 }
@@ -148,6 +145,7 @@ $("#add-search").on("click", function (event) {
 // When selecting a dropdown item it will display locations on the map
 // $(document).on("click", ".dropdown-item", displayLocationsInfo);
 // Deletes the dropdown item that the user wants to remove and removes it from the array
+
 $(document).on('click','.delete-item', function(){
   // Removes item from html
   $(this).closest('a').remove();
@@ -158,6 +156,10 @@ $(document).on('click','.delete-item', function(){
     }
   }
 })
+
+// When selecting a dropdown item it will display locations on the map
+/*$(document).on("click", ".dropdown-item", displayLocationsInfo);
+// Deletes the dropdown item that the user wants to remove
 
 /* Note: This example requires that you consent to location sharing when
 prompted by your browser. If you see the error "The Geolocation service
@@ -180,6 +182,7 @@ function initMap() {
   });
 
   infoWindow = new google.maps.InfoWindow;
+   // Create the places service.
   var service = new google.maps.places.PlacesService(map);
   var getNextPage = null;
 
@@ -198,9 +201,13 @@ function initMap() {
       map.setCenter(pos);
       console.log(pos);
 
+     //test for the weather api
+     getWeather(pos);
+
+      // Perform a nearby search.
       service.nearbySearch(
         {
-          location: pos, radius: 500, type: ['store']
+          location: pos, radius: 500, type: ['restaurants']
         },
         function (results, status, pagination) {
           if (status !== 'OK') return;
@@ -210,19 +217,15 @@ function initMap() {
 
           for (var i = 0; i <= 5; i++){
             console.log(results[i].name);
-            $("#table-results-Body").append(`<tr><td> ${results[i].name} Open Now :            
-            
-            ${results[i].opening_hours.open_now} 
-            ${results[i].types} 
-            }</td></tr>`);
+            $("#table-results-Body").append(`<tr>
+                    
+              <th> ${results[i].name} <br></th>                     
+                    <td>Type: 
+                    ${results[i].types} <br>                   
+                    </td></tr>`);
           }
-          
-          // moreButton.disabled = !pagination.hasNextPage;
-          // getNextPage = pagination.hasNextPage && function() {
-          //   pagination.nextPage();${results[i].photos[0].html_attributions[0]
+      });
 
-          // };
-        });
     }, function () {
       handleLocationError(true, infoWindow, map.getCenter());
 
@@ -231,17 +234,6 @@ function initMap() {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
-
-  // Create the places service.
-
-  // var moreButton = document.getElementById('more');
-  // moreButton.onclick = function() {
-  //   moreButton.disabled = true;
-  //   if (getNextPage) getNextPage();
-  // };
-
-  // Perform a nearby search.
-
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -256,9 +248,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 function createMarkers(places) {
   var bounds = new google.maps.LatLngBounds();
   var placesList = document.getElementById('places');
-
-
-
   for (var i = 0, place; place = places[i]; i++) {
     var image = {
       url: place.icon,
@@ -275,38 +264,41 @@ function createMarkers(places) {
       position: place.geometry.location
     });
 
-    // var li = document.createElement('li');
-    // li.textContent = place.name;
-    // placesList.appendChild(li);
-
     bounds.extend(place.geometry.location);
   }
   map.fitBounds(bounds);
 }
 
 
-var getWeather = function () {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      lat: position.coords.latitude
-      lng: position.coords.longitude
-    });
-  };
-  var queryURL = `https://api.weather.gov/points/${lat},${lng}`
+var getWeather = function(userPosition) {
+  var userState;
+  var userCity;
+  var userTemp;
+  var userTempUnit;
+  
+  var queryURL = `https://api.weather.gov/points/${userPosition.lat},${userPosition.lng}`;
+
+  var weatherDiv = $(`<p>`)
+
+  console.log(userPosition);
+  console.log(queryURL);
+
   $.ajax({
     url: queryURL,
     method: "GET"
-  }).then(function (response) {
-    console.log(response["properties"]["relativeLocation"]["properties"]["city"]);
-    console.log(response["properties"]["relativeLocation"]["properties"]["state"]);
-    console.log(response["properties"]["forecast"]);
+  }).then(function(response) {
+    userCity = response["properties"]["relativeLocation"]["properties"]["city"];
+    userState = response["properties"]["relativeLocation"]["properties"]["state"];
+
     var queryURL_1 = response["properties"]["forecast"];
     $.ajax({
       url: queryURL_1,
       method: "GET"
-    }).then(function (response) {
-      console.log(response["properties"]["periods"][0]["temperature"]);
-      console.log(response["properties"]["periods"][0]["temperatureUnit"]);
+    }).then(function(response) {
+      userTemp = response["properties"]["periods"][0]["temperature"];
+      userTempUnit = response["properties"]["periods"][0]["temperatureUnit"];
+      weatherDiv.text(`${userCity}, ${userState}: ${userTemp}° ${userTempUnit}`);
+      $(`#weather`).append(weatherDiv);
     });
   });
 };
