@@ -70,6 +70,7 @@ function renderDropDownMenu() {
     // Adding the button to the buttons-view div
    // let row = a.append('&nbsp <button class="delete-item btn-danger btn-sm"></button>');
     $("#newly-added-drop-down-btns").append(a);
+
   }
 }
 // This function will add what was searched to the dropdown menu if it was not already in the list
@@ -113,6 +114,17 @@ $("#add-fav").on("click", function (event) {
   // Clearing input after the search is added
   document.getElementById("search-input").value = "";
 });
+
+$(document).on('click','.delete-item', function(){
+  // Removes item from html
+  $(this).closest('a').remove();
+  // Removes item from array
+  for (let i = DROPDOWNITEMS.length; i >= 0; i--) {
+    if (DROPDOWNITEMS[i] === this.closest('a').getAttribute("data-name")) {
+      DROPDOWNITEMS.splice(i, 1);
+    }
+  }
+})
 
 
 /* Note: This example requires that you consent to location sharing when
@@ -184,20 +196,14 @@ function initMap() {
            
             $("#table-results-Body").append(`<tr>
                     
-              <th> ${results[i].name} <br></th> 
-                    
+              <th> ${results[i].name} <br></th>                     
                     <td>Type: 
-                    ${results[i].types} <br>
-                   
+                    ${results[i].types} <br>                   
                     </td></tr>`);
           }
-         })
-         
-        });
 
-
-       
-
+         })         
+        });    
     }, function () {
       handleLocationError(true, infoWindow, map.getCenter());
 
