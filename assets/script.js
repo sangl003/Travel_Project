@@ -11,25 +11,25 @@
 // Google places API KEY: AIzaSyDBufjD9u_vKD1khDCHUIOj8dnwPYsF2cc
 // ------------------------------------------ CHECK LIST ------------------------------------------
 // ----------- Dropdown Menu-----------
-// Assigned: Joe
+//
 // [x] Predefined list of 4-6 things (i.e. restaurants, landmarks, parks etc)
 // [x] The list expands on user input for the last 3 searches, using firebase to store values
-// [ ] Drop down to create dynamic favorite list
-// [ ] Results div to display list of responses
+// [x] Drop down to create dynamic favorite list
+// [x] Results div to display list of responses
 // -------------- Map View --------------
-// Assigned:
-// [ ] Google maps to be displayed in a Mapview div spanning 70% of screen
-// [ ] Zoom in and Zoom out functionality
-// [ ] Location button to determine users location
+//
+// [x] Google maps to be displayed in a Mapview div spanning 70% of screen
+// [x] Zoom in and Zoom out functionality
+// [x] Location button to determine users location
 // [ ] Info buttons on points of interest? - Google Places API ref
 // ---------- Table Creation ----------
-// Assigned:
-// [ ] Creating a table below the displayed map
+//
+// [x] Creating a table below the displayed map
 // [ ] Reviews and distance are displayed on the table
 // Optional Additions (If we have time)
-// Assigned:
+//
 // ----------- Weather Display ---------
-// [ ] Weather display in the top-right corner? 
+// [x] Weather display in the top? 
 //      keep this simple as it's not core of our app
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
 var DROPDOWNITEMS = [];
@@ -70,9 +70,9 @@ function renderDropDownMenu() {
     // Adding the button to the buttons-view div
    // let row = a.append('&nbsp <button class="delete-item btn-danger btn-sm"></button>');
     $("#newly-added-drop-down-btns").append(a);
-
   }
 }
+
 // This function will add what was searched to the dropdown menu if it was not already in the list
 $("#add-fav").on("click", function (event) {
   event.preventDefault();
@@ -81,8 +81,12 @@ $("#add-fav").on("click", function (event) {
   // Alert since this was already in the array
   if (DROPDOWNITEMS.length < 5) {
     // If the search by the user is already in the array an alert appears
-    if (DROPDOWNITEMS.includes(search)) {
-      alert("Search is already in the dropdown");
+    if (search === "") {
+      // Do not do anything if the user inputs an empty string
+    }
+    else if (DROPDOWNITEMS.includes(search)) {
+      //alert("Search is already in the dropdown");
+      duplicateModal();
     }
     // If the function includes() fails then we try another way of checking for a duplicate string
     else {
@@ -98,7 +102,7 @@ $("#add-fav").on("click", function (event) {
       // Just alerts the user if the string was already in the array
       // Otherwise if word does not match array then it is added to the array
       if (isTrue) {
-        alert("Search is already in the dropdown");
+        duplicateModal();
       } else {
         // Converts the string so that only the first letter in the string is capitalized
         let convertedStr = upperCaseFirstLetterInString(search);
@@ -106,8 +110,7 @@ $("#add-fav").on("click", function (event) {
       }
     }
   } else { // If the DROPDOWNITEMS.length reaches 4 we will only give the user 3 searches unless they remove some before adding more searches
-    
-    alert("Search limit has been reached, please Reset your list");
+    limitModal();
   }
   // Calling renderButtons which handles the processing of our search array
   renderDropDownMenu();
@@ -126,6 +129,45 @@ $(document).on('click','.delete-item', function(){
   }
 })
 
+// Basic modal when duplicate search happens
+function duplicateModal() {
+  // Get the modal
+  let modal = document.getElementById('modal-1');
+  // Get the <span> element that closes the modal
+  let span = document.getElementsByClassName("close")[0];
+  // Opens the modal 
+  modal.style.display = "block";
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+      }
+  }
+}
+
+// Basic modal when search limit is reached
+function limitModal() {
+  // Get the modal
+  let modal = document.getElementById('modal-2');
+  // Get the <span> element that closes the modal
+  let span = document.getElementsByClassName("close")[0];
+  // Opens the modal 
+  modal.style.display = "block";
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+      }
+  }
+}
 
 /* Note: This example requires that you consent to location sharing when
 prompted by your browser. If you see the error "The Geolocation service
@@ -164,7 +206,6 @@ function initMap() {
 
       infoWindow.setPosition(pos);
       infoWindow.setContent('Location found.');
-
       
       infoWindow.open(map);
       map.setCenter(pos);
@@ -172,7 +213,6 @@ function initMap() {
 
      //test for the weather api
      getWeather(pos);
-   
 
      $(document).on('click','.dropdown-item', function(){
       // Removes item from html
@@ -223,7 +263,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.open(map);
 } // End of handleLocationError function
 
-
 function createMarkers(places) {
   var bounds = new google.maps.LatLngBounds();
   var placesList = document.getElementById('places');
@@ -250,15 +289,12 @@ function createMarkers(places) {
   map.fitBounds(bounds);
 }
 
-
-
 $("#reset-fav").on("click", function (event) {
   event.preventDefault();
   $("#newly-added-drop-down-btns").empty(); 
   $("#table-results-Body").empty();
- // $(`#weather`).empty();
+// $(`#weather`).empty();
 // initMap();
- 
 });
 
 var getWeather = function(userPosition) {

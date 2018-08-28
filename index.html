@@ -30,15 +30,14 @@
                                 <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                                    <a class="dropdown-item" id ="store" href="#">store</a>
+                                    <a class="dropdown-item" id ="Store" href="#">store</a>
                                     <a class="dropdown-item" id ="Shopping" href="#">restaurant</a>
-                                    <a class="dropdown-item" id =  "bank" href="#">bank</a>
+                                    <a class="dropdown-item" id ="Bank" href="#">bank</a>
                                     <div class="dropdown-divider"></div>
                                     <div id="newly-added-drop-down-btns"></div>
                                 </div>
                             </li>
                         </ul>
-
 
                         <div id="weather">
                         
@@ -52,28 +51,23 @@
                     </div>
                 </nav>
 
-
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Allow VSTR. to access your location?</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                ...
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary">Allow</button>
-                            </div>
-                        </div>
+                <!-- Duplicate Modal, 1 -->
+                <div id="modal-1" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                    <span class="class">&times;</span>
+                    <p>Search is already in the dropdown, try searching something else</p>
                     </div>
-                </div>
-                <!-- Dropdown menu -->
+                </div> <!-- End of Duplicate Modal, 1 -->
+
+                <!-- Limit Modal, 2 -->
+                <div id="modal-2" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>Search limit has been reached, please close out some the searches in the dropdown</p>
+                    </div>
+                </div> <!-- End of Limit Modal, 2 -->
 
             </div>
         </div> <!-- End of row1 containing Header and drop down -->
