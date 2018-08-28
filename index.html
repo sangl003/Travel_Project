@@ -30,8 +30,9 @@
                                 <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">Dropdown</a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Restaurants</a>
-                                    <a class="dropdown-item" href="#">Shopping</a>
+                                    <a class="dropdown-item" id =  "Restaurants" href="#">gym</a>
+                                    <a class="dropdown-item" id ="Shopping" href="#">store</a>
+                                    <a class="dropdown-item" id ="Shopping" href="#">restaurant</a>
                                     <div class="dropdown-divider"></div>
                                     <div id="newly-added-drop-down-btns"></div>
                                 </div>
@@ -45,7 +46,8 @@
 
                         <form class="form-inline my-2 my-lg-0">
                             <input id="search-input" class="form-control mr-sm-2" type="search" placeholder="What to search?" aria-label="Search">
-                            <button id="add-search" class="btn btn-outline-success my-2 my-sm-0" type="submit">Add Favorites</button>
+                            <button id="add-fav" class="btn btn-outline-success my-2 my-sm-0" type="submit">Add Favorites</button>
+                            <button id="reset-fav" class="btn btn-outline-success my-2 my-sm-0" type="reset">Reset Favorites</button>
                         </form>
                     </div>
                 </nav>
@@ -88,24 +90,18 @@
         </div> <!-- End of row2 containing Map -->
         <div class="row">
             <div class="col-lg-12">
-                <!-- <div class="card"> -->
-                <!-- <div class="card-body">
-                <h5 class="card-title">Table of results</h5>                -->
-                <table id="Results" class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">Search Results</th>
-                        </tr>
-                    </thead>
-                    <tbody id = "table-results-Body">
+            <div class="card">
+               <!-- <div class="card-body"> -->
+                <h5 class="card-title">Search Results</h5>              
+                        <table id="Results" class="table table-hover table-dark" style = "table-layout: fixed">
+                                <tbody id = "table-results-Body">                          
 
-                    </tbody>
-                  
-                </table>
-                <!-- </div> -->
-
+                            </tbody>
+                        
+                        </table>
             </div>
-            <!-- </div>  -->
+<!-- </div> -->
+            </div>
         </div> <!-- End of row3 containing Map -->
     </div> <!-- End of container -->
 
