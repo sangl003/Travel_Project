@@ -34,6 +34,20 @@
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
 var DROPDOWNITEMS = [];
 var markers = [];
+var possibleFavorites = [
+  `accounting`, ` airport`, ` amusement park`, ` aquarium`, ` art gallery`, ` atm`, ` bakery`, ` bank`, ` bar`, `
+  beauty salon`, `bicycle store`, `book store`, `bowling alley`, `bus station`, `cafe`, `campground`, `
+  car dealer`, `car rental`, `car repair`, `car wash`, `casino`, `cemetery`, `church`, `city hall`, `
+  clothing store`, `convenience store`, `courthouse`, `dentist`, `department store`, `doctor`, `
+  electrician`, `electronics store`, `embassy`, `fire station`, `florist`, `funeral home`, `furniture store`, `
+  gas station`, `gym`, `hair care`, `hardware store`, `hindu temple`, `home goods store`, `hospital`, `insurance agency`, `
+  jewelry store`, `laundry`, `lawyer`, `library`, `liquor store`, `local government office`, `locksmith`, `lodging`, `
+  meal delivery`, `meal takeaway`, `mosque`, `movie rental`, `movie theater`, `moving company`, `museum`, `night club`, `
+  painter`, `park`, `parking`, `pet store`, `pharmacy`, `physiotherapist`, `plumber`, `police`, `post office`, `
+  real estate agency`, `restaurant`, `roofing contractor`, `rv park`, `school`, `shoe store`, `shopping mall`, `spa`, `
+  stadium`, `storage`, `store`, `subway station`, `supermarket`, `synagogue`, `taxi stand`, `train station`, `transit station`, 
+  `travel agency`, `veterinary care`, `zoo`
+];
 
 // Adding a div so the dropdown items are not clustered into one
 function addDiv() {
@@ -79,40 +93,47 @@ $("#add-fav").on("click", function (event) {
   event.preventDefault();
   // This line grabs the input from the textbox
   var search = $("#search-input").val().trim();
-  // Alert since this was already in the array
-  if (DROPDOWNITEMS.length < 5) {
-    // If the search by the user is already in the array an alert appears
-    if (search === "") {
-      // Do not do anything if the user inputs an empty string
-    }
-    else if (DROPDOWNITEMS.includes(search)) {
-      //alert("Search is already in the dropdown");
-      duplicateModal();
-    }
-    // If the function includes() fails then we try another way of checking for a duplicate string
-    else {
-      var isTrue = false;
-      // isTrue returns true if EXACT string found in the array
-      for (let n = 0; n < DROPDOWNITEMS.length; n++) {
-        if (search.toUpperCase() === DROPDOWNITEMS[n].toUpperCase()) {
-          isTrue = isTrue || true;
+
+  //checks the user input to see if it is a valid search
+  if (possibleFavorites.indexOf(search) !== -1) {
+    // Alert since this was already in the array
+    if (DROPDOWNITEMS.length < 5) {
+      // If the search by the user is already in the array an alert appears
+      if (search === "") {
+        // Do not do anything if the user inputs an empty string
+      }
+      else if (DROPDOWNITEMS.includes(search)) {
+        //alert("Search is already in the dropdown");
+        duplicateModal();
+      }
+      // If the function includes() fails then we try another way of checking for a duplicate string
+      else {
+        var isTrue = false;
+        // isTrue returns true if EXACT string found in the array
+        for (let n = 0; n < DROPDOWNITEMS.length; n++) {
+          if (search.toUpperCase() === DROPDOWNITEMS[n].toUpperCase()) {
+            isTrue = isTrue || true;
+          } else {
+            isTrue = isTrue || false;
+          }
+        }
+        // Just alerts the user if the string was already in the array
+        // Otherwise if word does not match array then it is added to the array
+        if (isTrue) {
+          duplicateModal();
         } else {
-          isTrue = isTrue || false;
+          // Converts the string so that only the first letter in the string is capitalized
+          let convertedStr = upperCaseFirstLetterInString(search);
+          DROPDOWNITEMS.push(convertedStr);
         }
       }
-      // Just alerts the user if the string was already in the array
-      // Otherwise if word does not match array then it is added to the array
-      if (isTrue) {
-        duplicateModal();
-      } else {
-        // Converts the string so that only the first letter in the string is capitalized
-        let convertedStr = upperCaseFirstLetterInString(search);
-        DROPDOWNITEMS.push(convertedStr);
-      }
-    }
-  } else { // If the DROPDOWNITEMS.length reaches 4 we will only give the user 3 searches unless they remove some before adding more searches
-    limitModal();
-  }
+    } else { // If the DROPDOWNITEMS.length reaches 4 we will only give the user 3 searches unless they remove some before adding more searches
+      limitModal();
+      };
+  } else {
+    validateModal();
+  };
+
   // Calling renderButtons which handles the processing of our search array
   renderDropDownMenu();
   // Clearing input after the search is added
@@ -139,12 +160,12 @@ function duplicateModal() {
   // Opens the modal 
   modal.style.display = "block";
   // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
+  $(`.close`).on(`click`, function() {
     modal.style.display = "none";
-  }
+  });
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target === modal) {
         modal.style.display = "none";
       }
   }
@@ -159,12 +180,32 @@ function limitModal() {
   // Opens the modal 
   modal.style.display = "block";
   // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
+  $(`.close`).on(`click`, function() {
     modal.style.display = "none";
-  }
+  });
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+      }
+  }
+}
+
+// validating modal
+function validateModal() {
+  // Get the modal
+  let modal = document.getElementById('modal-3');
+  // Get the <span> element that closes the modal
+  let span = document.getElementsByClassName("close")[0];
+  // Opens the modal 
+  modal.style.display = "block";
+  // When the user clicks on <span> (x), close the modal
+  $(`.close`).on(`click`, function() {
+    modal.style.display = "none";
+  });
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target === modal) {
         modal.style.display = "none";
       }
   }
