@@ -33,6 +33,7 @@
 //      keep this simple as it's not core of our app
 // -------------------------------- GLOBAL VARIABLES (CAPS PLEASE) --------------------------------
 var DROPDOWNITEMS = [];
+var markers = [];
 
 // Adding a div so the dropdown items are not clustered into one
 function addDiv() {
@@ -186,7 +187,7 @@ function initMap() {
 
   map = new google.maps.Map(document.getElementById('map'), {
     center: minneapolis,
-    mapTypeId: 'satellite',
+    //mapTypeId: 'satellite',
     zoom: 14
   });
 
@@ -202,11 +203,8 @@ function initMap() {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
-      // var service = new google.maps.places.PlacesService(map);
-
       infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
-      
+      infoWindow.setContent('Location found.');      
       infoWindow.open(map);
       map.setCenter(pos);
       console.log(pos);
@@ -263,6 +261,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.open(map);
 } // End of handleLocationError function
 
+
 function createMarkers(places) {
   var bounds = new google.maps.LatLngBounds();
   var placesList = document.getElementById('places');
@@ -283,19 +282,37 @@ function createMarkers(places) {
       title: place.name,
       position: place.geometry.location
     });
-
+    markers.push(marker);
+    console.log(markers);
     bounds.extend(place.geometry.location);
   }
   map.fitBounds(bounds);
 }
+
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+
 
 $("#reset-fav").on("click", function (event) {
   event.preventDefault();
   $("#newly-added-drop-down-btns").empty(); 
   $("#table-results-Body").empty();
   DROPDOWNITEMS = [];
-// $(`#weather`).empty();
-// initMap();
+  deleteMarkers();
+
 });
 
 var getWeather = function(userPosition) {
@@ -323,10 +340,13 @@ var getWeather = function(userPosition) {
       url: queryURL_1,
       method: "GET"
     }).then(function(response) {
+      console.log(response);
       userTemp = response["properties"]["periods"][0]["temperature"];
       userTempUnit = response["properties"]["periods"][0]["temperatureUnit"];
-      weatherDiv.text(`${userCity}, ${userState}: ${userTemp}° ${userTempUnit}`);
-      $(`#weather`).append(weatherDiv);
+      userForecast = response["properties"]["periods"][0]["shortForecast"]
+      usericon = response["properties"]["periods"][0]["icon"]
+     // weatherDiv.text(``);
+      $(`#weather`).html(`<img src = ${usericon} style = "width: 4em">  <br> ${userCity}, ${userState}: ${userTemp}° ${userTempUnit} <br> ${userForecast}`);
     });
   });
 };
