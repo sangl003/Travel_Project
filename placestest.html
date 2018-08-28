@@ -99,6 +99,7 @@
         zoom: 17
       });
       infoWindow = new google.maps.InfoWindow;
+        // Create the places service.
       var service = new google.maps.places.PlacesService(map);
       var getNextPage = null;
 
@@ -116,17 +117,17 @@
           infoWindow.open(map);
           map.setCenter(pos);
           console.log(pos);
-
+      // Perform a nearby search.
           service.nearbySearch(
-            { location: pos, radius: 500, type: ['store'] },
+            { location: pos, radius: 500, type: ['restaurants'] },
             function (results, status, pagination) {
               if (status !== 'OK') return;
 
               createMarkers(results);
-              // moreButton.disabled = !pagination.hasNextPage;
-              // getNextPage = pagination.hasNextPage && function() {
-              //   pagination.nextPage();
-              // };
+              moreButton.disabled = !pagination.hasNextPage;
+              getNextPage = pagination.hasNextPage && function() {
+                pagination.nextPage();
+              };
             });
         }, function () {
           handleLocationError(true, infoWindow, map.getCenter());
@@ -137,7 +138,7 @@
         handleLocationError(false, infoWindow, map.getCenter());
       }
 
-      // Create the places service.
+    
 
       // var moreButton = document.getElementById('more');
       // moreButton.onclick = function() {
@@ -145,7 +146,7 @@
       //   if (getNextPage) getNextPage();
       // };
 
-      // Perform a nearby search.
+    
 
     }
 
@@ -199,7 +200,7 @@
     <ul id="places"></ul>
     <button id="more">More results</button>
   </div>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBilTfdRvt-zY9DekzPLxPmplUg9DexOns&libraries=places&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDR2o3DtMohuIpzE_e2_9GMcB9qVYeZZXM&libraries=places&callback=initMap" async defer></script>
 </body>
 
 </html>
