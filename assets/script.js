@@ -57,6 +57,7 @@ function displayLocationsInfo() {
     )};
   function populateButtons(arrayToUse, classToAdd, areaToAddTo) {
     $(areaToAddTo).empty();
+
   
   };
 }
@@ -95,6 +96,7 @@ function renderDropDownMenu() {
     // Providing the initial button text
     a.text(DROPDOWNITEMS[i]);
     // Adding the button to the buttons-view div
+
     let row = a.append('&nbsp <button class="delete-item btn-danger btn-sm">X</button>');
     $("#newly-added-drop-down-btns").append(row);
   }
@@ -143,6 +145,7 @@ $("#add-search").on("click", function (event) {
 // When selecting a dropdown item it will display locations on the map
 // $(document).on("click", ".dropdown-item", displayLocationsInfo);
 // Deletes the dropdown item that the user wants to remove and removes it from the array
+
 $(document).on('click','.delete-item', function(){
   // Removes item from html
   $(this).closest('a').remove();
@@ -157,9 +160,6 @@ $(document).on('click','.delete-item', function(){
 // When selecting a dropdown item it will display locations on the map
 /*$(document).on("click", ".dropdown-item", displayLocationsInfo);
 // Deletes the dropdown item that the user wants to remove
-$(document).on('click','.delete-item', function(){
-  $(this).remove();
-})*/
 
 /* Note: This example requires that you consent to location sharing when
 prompted by your browser. If you see the error "The Geolocation service
@@ -219,14 +219,13 @@ function initMap() {
             console.log(results[i].name);
             $("#table-results-Body").append(`<tr>
                     
-              <th> ${results[i].name} <br></th> 
-                    
+              <th> ${results[i].name} <br></th>                     
                     <td>Type: 
-                    ${results[i].types} <br>
-                   
+                    ${results[i].types} <br>                   
                     </td></tr>`);
           }
-         });
+      });
+
     }, function () {
       handleLocationError(true, infoWindow, map.getCenter());
 
